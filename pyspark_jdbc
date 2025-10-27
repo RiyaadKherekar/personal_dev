@@ -1,0 +1,165 @@
+import sys
+import boto3
+import json
+import time
+import dateutil.tz
+from datetime import datetime
+from botocore.exceptions import ClientError
+from pyspark.sql.functions import col, max as spark_max, min as spark_min, lit
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+
+args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+
+output_path = "s3://ct-ire-edp-jdbc-poc/raw_data/Data_Enhancements/"
+source_system = "SSR"
+table_name = "Batch"
+partition_col = "Batch_Id"
+# This can be toggled based on the table type. We'll only use this if its a UPDATE table. We do not need watermarks for INSERT (APPEND) tables.
+watermark_col = "Batch_End_Time" 
+dynamodb_table = "non-prod-jdbc-poc-cdc-tracker"
+source_table = f"{source_system}#{table_name}"
+region = "eu-west-1"
+localtime = dateutil.tz.gettz('Africa/Johannesburg')
+# now = datetime.now(tz=localtime).isoformat()
+now = datetime.now(tz=localtime).strftime("%Y-%m-%d %H:%M:%S")
+
+# Get secrets
+def get_jdbc_credentials(secret_name="JDBC_POC", region_name=region):
+    session = boto3.session.Session()
+    client = session.client(service_name='secretsmanager', region_name=region_name)
+    response = client.get_secret_value(SecretId=secret_name)
+    secret_dict = json.loads(response['SecretString'])
+    if not secret_dict or len(secret_dict) != 1:
+        raise ValueError("Secret must contain exactly one key-value pair.")
+    return next(iter(secret_dict.items()))
+
+username, password = get_jdbc_credentials()
+
+# DDB helpers to track things like full_load or cdc, lowerbound, upperbound, low_watermark, high_watermark, partitionColumn, row_count etc.
+def get_latest_metadata():
+    dynamodb = boto3.client("dynamodb", region_name=region)
+    response = dynamodb.query(
+        TableName=dynamodb_table,
+        KeyConditionExpression="source_table = :st",
+        ExpressionAttributeValues={":st": {"S": source_table}},
+        ScanIndexForward=False,
+        Limit=1
+    )
+    items = response.get("Items", [])
+    return items[0] if items else None
+
+def log_run_to_dynamodb(lowerbound, upperbound, row_count, low_watermark, high_watermark, operation):
+    dynamodb = boto3.client("dynamodb", region_name=region)
+    dynamodb.put_item(
+        TableName=dynamodb_table,
+        Item={
+            "source_table": {"S": source_table},
+            "last_updated": {"S": now},
+            "partitionColumn": {"S": partition_col},
+            "lowerbound": {"N": str(lowerbound)},
+            "upperbound": {"N": str(upperbound)},
+            "row_count": {"N": str(row_count)},
+            "operation": {"S": operation},
+            "low_watermark": {"S": low_watermark},
+            "high_watermark": {"S": high_watermark}
+        }
+    )
+
+# Determine if this is a CDC job
+is_cdc = bool(watermark_col and watermark_col.strip())
+
+# Load logic
+metadata = get_latest_metadata()
+print(f"This is the most recent item within {dynamodb_table}: {metadata}")
+first_run = metadata is None
+
+if first_run:
+    print(f"No previous run found for {source_table}. Performing full load.")
+    previous_upper = 0
+    query = f"(SELECT * FROM {source_system}.{table_name} WHERE {partition_col} > {previous_upper}) AS t"
+else:
+    previous_upper = int(metadata["upperbound"]["N"])
+    print("Performing CDC load." if is_cdc else "Performing insert-only incremental load.")
+    if is_cdc:
+        low_watermark = metadata["high_watermark"]["S"]
+        high_watermark = now
+        query = f"""
+            (SELECT * FROM {source_system}.{table_name}
+             WHERE {partition_col} > {previous_upper}
+                OR ({watermark_col} > '{low_watermark}' AND {watermark_col} <= '{high_watermark}')) AS t
+        """
+    else:
+        query = f"(SELECT * FROM {source_system}.{table_name} WHERE {partition_col} > {previous_upper}) AS t"
+
+print("Opening JDBC connection to SQL Server.")
+print(f"Query: {query}")
+
+print("Opening JDBC connection to 10.122.144.74 on port 1433.")
+print(f"Query to execute: {query}")
+
+start_time = time.time()
+jdbc_df = spark.read.format("jdbc") \
+    .option("url", "jdbc:sqlserver://10.122.144.74:1433;databaseName=Data_Enhancements") \
+    .option("dbtable", query) \
+    .option("partitionColumn", partition_col) \
+    .option("lowerBound", previous_upper) \
+    .option("upperBound", "999999999") \
+    .option("numPartitions", 8) \
+    .option("user", username) \
+    .option("password", password) \
+    .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
+    .load()
+
+elapsed_time = (time.time() - start_time) / 60
+print(f"Read took {elapsed_time:.2f} minutes")
+
+row_count = jdbc_df.count()
+print(f"Row count extracted: {row_count}")
+
+if row_count == 0:
+    print("No new data to process. Exiting.")
+    job.commit()
+else:
+    new_upper = jdbc_df.agg(spark_max(col(partition_col))).collect()[0][0]
+    print(f"New upper bound: {new_upper}")
+    
+    # Watermark value
+    if first_run and is_cdc:
+        low_watermark_val = jdbc_df.agg(spark_min(col(watermark_col))).collect()[0][0]
+        high_watermark_val = jdbc_df.agg(spark_max(col(watermark_col))).collect()[0][0]
+    elif is_cdc:
+        low_watermark_val = low_watermark
+        high_watermark_val = high_watermark
+    else:
+        low_watermark_val = ""
+        high_watermark_val = ""
+        
+    # Add CDC partition column and write
+    cdc_date_partition = datetime.now(tz=localtime).strftime("%Y-%m-%d-%H-%M")
+    jdbc_df = jdbc_df.withColumn("cdc_date", lit(cdc_date_partition))
+    
+    jdbc_df.write.mode("append").partitionBy("cdc_date").parquet(f"{output_path}{source_system}/{table_name}/")
+    print(f"Data written to: {output_path}{source_system}/{table_name}/")
+    
+    # Log metadata
+    log_run_to_dynamodb(
+        lowerbound=previous_upper,
+        upperbound=new_upper,
+        row_count=row_count,
+        low_watermark=str(low_watermark_val),
+        high_watermark=str(high_watermark_val),
+        operation="full_load" if first_run else "cdc"
+        )
+    
+    print(f"Metadata logged to {dynamodb_table}")
+    job.commit()
