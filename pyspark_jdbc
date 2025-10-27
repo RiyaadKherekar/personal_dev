@@ -109,7 +109,7 @@ print(f"Query to execute: {query}")
 
 start_time = time.time()
 jdbc_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:sqlserver://10.122.144.74:1433;databaseName=Data_Enhancements") \
+    .option("url", "jdbc:sqlserver://xx.xxx.xxx.xxx:1433;databaseName=Data_Enhancements") \
     .option("dbtable", query) \
     .option("partitionColumn", partition_col) \
     .option("lowerBound", previous_upper) \
