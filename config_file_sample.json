@@ -1,0 +1,849 @@
+{
+    "source_name": "grandcentral",
+    "environments": {
+      "non-prod": {
+        "global_ingestion_config": {
+          "truncate_table_flag": "Y",
+          "soft_rule_template_name": ""
+        },
+        "global_active_table_config": {
+          "job_template_name": "non-prod-active-table-load",
+          "ignore_column": [
+            "year",
+            "month",
+            "day",
+            "hour"
+          ]
+        },
+        "tables": [
+          {
+            "table_name": "account",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.Account/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "allocation",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.Allocation/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "allocationbanktransaction",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.AllocationBankTransaction/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "allocationstatus",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.AllocationStatus/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "bankbatch",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.BankBatch/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "banktransaction",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.BankTransaction/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "banktransactionstatus",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.BankTransactionStatus/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "domain",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.Domain/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N"
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid"
+            }
+          },
+          {
+            "table_name": "externalsystem",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.ExternalSystem/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "ruleconfig",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.RuleConfig/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "rule_id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "rule_id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "user",
+            "ingestion_config": {
+              "job_template_name": "non-prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.User/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            }
+          }
+        ]
+      },
+      "prod": {
+        "global_ingestion_config": {
+          "truncate_table_flag": "Y",
+          "soft_rule_template_name": ""
+        },
+        "global_active_table_config": {
+          "job_template_name": "prod-active-table-load",
+          "ignore_column": [
+            "year",
+            "month",
+            "day",
+            "hour"
+          ]
+        },
+        "tables": [
+          {
+            "table_name": "account",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.Account/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "allocation",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.Allocation/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 5
+            }
+          },
+          {
+            "table_name": "allocationbanktransaction",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.AllocationBankTransaction/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 5
+            }
+          },
+          {
+            "table_name": "allocationstatus",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.AllocationStatus/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "bankbatch",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.BankBatch/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "banktransaction",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.BankTransaction/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "banktransactionstatus",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.BankTransactionStatus/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "domain",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.Domain/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "externalsystem",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.ExternalSystem/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "ruleconfig",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.RuleConfig/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "rule_id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "rule_id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          },
+          {
+            "table_name": "user",
+            "ingestion_config": {
+              "job_template_name": "prod-ingestion-generic-file-loader-rdbms",
+              "enabled_flag": "Y",
+              "load_frequency": "DFL",
+              "source_file_date_format": "",
+              "source_file_type": "parquet",
+              "source_file_location": "landing/grandcentral/data/grandcentral.User/",
+              "source_file_name_wild_card": "*",
+              "source_file_extension": ".parquet",
+              "source_file_delimiter": "",
+              "source_file_header_row_exist": "",
+              "source_file_header_file_exist": "",
+              "source_file_column_names": [
+                ""
+              ],
+              "source_file_unique_key_cols": "id",
+              "partition_columns": "cdc_date",
+              "source_file_control_footer_exist": "N",
+              "control_file_ind": "N",
+              "worker_type": "G.1X",
+              "worker_num": 2
+            },
+            "active_table_config": {
+              "filter_condition": "N/A",
+              "change_audit_flag": "N",
+              "sort_order": "Desc",
+              "order_cols": "cdc_batchid",
+              "soft_rule_template_name": "dfl_snapshot",
+              "key_cols": "id",
+              "order_cols_1": "cdc_date",
+              "order_cols_2": "cdc_batchid",
+              "worker_type": "G.2X",
+              "worker_num": 2
+            }
+          }
+        ]
+      }
+    }
+  }
